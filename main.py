@@ -8,6 +8,11 @@ import excel_funcs as eF
 change_factors = False
 all_entries = []
 
+plant_categories = {
+            'container': ['quart', '1gal', '2gal', '3gal', '5gal', '7gal', '10gal', '15gal', '25gal'], 
+            'deciduous trees':['1.5"-2"', '2"-2.5"', '2.5"-3"', '3"-3.5"', '3.5"-4"'], 
+            'evergreen trees':["4'-5'", "5'-6'", "6'-7'", "7'-8'", "8'-9'", "9'-10'"],
+            'shrubs': ['12"-15"', '15"-18"', '18"-24"', '24"-30"', '30"-36"', '36"-40"']}
 base_labor_factors = ['0.10', '0.15', '0.20', '0.35', '0.45', '0.50', '0.60', '0.45', '0.75' ,'2.0', '2.5', '3.0', '3.5', '4.0', '2.0', '2.5','3.0', '3.5','4.0','5.0','0.35','0.45','0.55','0.65','0.70','0.80', '0.90']
 
 grid_rows = 3
@@ -94,12 +99,6 @@ def open_plant_window():
         cost_var = StringVar()
         plant_type_var = StringVar()
         
-
-        plant_categories = {
-            'container': ['quart', '1gal', '2gal', '3gal', '5gal', '7gal', '10gal', '15gal', '25gal'], 
-            'deciduous trees':['1.5"-2"', '2"-2.5"', '2.5"-3"', '3"-3.5"', '3.5"-4"'], 
-            'evergreen trees':["4'-5'", "5'-6'", "6'-7'", "7'-8'", "8'-9'", "9'-10'"],
-            'shrubs': ['12"-15"', '15"-18"', '18"-24"', '24"-30"', '30"-36"', '36"-40"']}
         
         def updateBox(*args):
             print(plant_type.get)
@@ -121,9 +120,7 @@ def open_plant_window():
         plant_size['values'] = plant_categories['container']
         plant_size.grid(row=grid_rows,column=3)
         plant_size.current(0)
-        
-        
-
+       
         new_cost = Entry(plant_window, textvariable=cost_var).grid(row=grid_rows, column=5)
         
     else:
@@ -131,6 +128,42 @@ def open_plant_window():
 
 
 def open_service_window():
+    def addService(window):
+        if s1_name_var.get() != '' and s1_matname_var.get() != '' and s1_matcost_var.get() != '' and s1_manhours_var.get() != '':
+            db_name = 'databases/' + str(e3_var.get()) + '.db'
+            print(db_name)
+            conn = sqlite3.connect(db_name)
+            cur = conn.cursor()
+            cur.execute('''INSERT INTO services VALUES (?,?,?,?)
+                        ''', (s1_name_var.get(), s1_matname_var.get(), s1_matcost_var.get(), s1_manhours_var.get()))
+            
+            ret_data = cur.execute('''SELECT * FROM services''').fetchall()
+            print(s1_manhours_var.get())
+            p_rows = 3
+            for i in ret_data:          
+                p_rows = p_rows + 1          
+                Label(service_window, text= i[0]).grid(row=p_rows, column=0)
+                Label(service_window, text= i[1]).grid(row=p_rows, column=1)
+                Label(service_window, text= i[2]).grid(row=p_rows, column=2)  
+                Label(service_window, text= i[3]).grid(row=p_rows, column=3)               
+                
+                Label(service_window, text=ret_data.index(i)).grid(row=p_rows, column=4)
+                
+            conn.commit()
+            conn.close()
+
+            s1_name_var.set('')
+            s1_matname_var.set('')
+            s1_matcost_var.set('')
+            s1_manhours_var.set('')
+        else:
+            messagebox.showwarning("showwarning", "All Fields Not Completed")
+    s1_name_var = StringVar()
+    s1_matname_var = StringVar()
+    s1_matcost_var = StringVar()
+    s1_manhours_var = StringVar()
+
+
     service_window = Toplevel()
     service_window.title('Services')
     service_window.geometry('700x700')
@@ -141,11 +174,32 @@ def open_service_window():
     header_material_name = Label(service_window, text='Materials').grid(row=1, column=1)
     header_material_cost = Label(service_window, text='Material Cost').grid(row=1, column=2)
     header_manhours = Label(service_window, text='Total Man Hours').grid(row=1, column=3)
+    row_num = Label(service_window, text='Row #').grid(row=1, column = 4)
+    add_plant = Button(service_window, text='Add Service Info', command=lambda: addService(service_window)).grid(row=0, column=5)
 
-    s1_name = Entry(service_window).grid(row=2, column=0)
-    s1_matname = Entry(service_window).grid(row=2, column=1)
-    s1_matcost = Entry(service_window).grid(row=2, column=2)
-    s1_manhours = Entry(service_window).grid(row=2, column=3)
+    s1_name = Entry(service_window, textvariable=s1_name_var).grid(row=2, column=0)
+    s1_matname = Entry(service_window, textvariable=s1_matname_var).grid(row=2, column=1)
+    s1_matcost = Entry(service_window, textvariable=s1_matcost_var).grid(row=2, column=2)
+    s1_manhours = Entry(service_window, textvariable=s1_manhours_var).grid(row=2, column=3)
+
+    db_name = 'databases/' + str(e3_var.get()) + '.db'
+    print(db_name)
+    conn = sqlite3.connect(db_name)
+    cur = conn.cursor()
+
+    cur.execute('''CREATE TABLE IF NOT EXISTS services (name TEXT, material TEXT, mat_cost TEXT, manhours TEXT)''')
+    conn.commit()
+    ret_data1 = cur.execute('''SELECT * FROM services''').fetchall()
+    p_rows = 3
+    for i in ret_data1:          
+        p_rows = p_rows + 1          
+        Label(service_window, text= i[0]).grid(row=p_rows, column=0)
+        Label(service_window, text= i[1]).grid(row=p_rows, column=1)
+        Label(service_window, text= i[2]).grid(row=p_rows, column=2)
+        Label(service_window, text= i[3]).grid(row=p_rows, column=3)                
+        Label(service_window, text=ret_data1.index(i)).grid(row=p_rows, column=4)
+        
+    conn.close()
 
 
 
@@ -166,78 +220,94 @@ def createExcel():
 
 
 def editPlants():
-
-    if e1_var.get() != '' and e2_var.get() != '' and e3_var.get() != '':
-        def show_plants():
-            def changePlantInfo(data):
-                
-                name_var1 = StringVar()
-                qty_var1 = StringVar()
-                size_var1 = StringVar()
-                cost_var1 = StringVar()
-                plant_type_var1 = StringVar()
-
-                edit_window = Toplevel()
-                padding_x1 = 5
-                padding_y1 =5
-
-                Label(edit_window, text= "Plant Name").grid(row=1, column=0, padx=padding_x1, pady=padding_y1)
-                Label(edit_window, text= "Qty").grid(row=1, column=1, padx=padding_x1, pady=padding_y1)
-                Label(edit_window, text= "Cost").grid(row=1, column=2, padx=padding_x1, pady=padding_y1)
-                Label(edit_window, text= "Size").grid(row=1, column=3, padx=padding_x1, pady=padding_y1)
-                Label(edit_window, text= " ").grid(row=1, column=5, padx=padding_x1, pady=padding_y1)
-                Label(edit_window, text="Plant Type").grid(row=1, column=5, padx=padding_x1, pady=padding_y1)
-
-                Label(edit_window, text=data[0]).grid(row=2, column=0, padx=padding_x1, pady=padding_y1)
-                Label(edit_window, text=data[1]).grid(row=2, column=1, padx=padding_x1, pady=padding_y1)
-                Label(edit_window, text=data[2]).grid(row=2, column=2, padx=padding_x1, pady=padding_y1)
-                Label(edit_window, text=data[3]).grid(row=2, column=3, padx=padding_x1, pady=padding_y1)
-                Label(edit_window, text=data[4]).grid(row=2, column=4, padx=padding_x1, pady=padding_y1)
-
-                def changeInfo():
-                    print('edit')
-
-                new_name1 = Entry(edit_window, textvariable=name_var1).grid(row=3, column=0, padx=padding_x1, pady=padding_y1)
-                new_qty1 = Entry(edit_window, textvariable=qty_var1).grid(row=3, column=1, padx=padding_x1, pady=padding_y1)
-                new_size1 = Entry(edit_window, textvariable=size_var1).grid(row=3, column=2, padx=padding_x1, pady=padding_y1)
-                new_cost1 = Entry(edit_window, textvariable=cost_var1).grid(row=3, column=3, padx=padding_x1, pady=padding_y1)
-                plant_type1 = ttk.Combobox(edit_window, values=['container', 'shrub', 'deciduous tree', 'evergreen tree'], textvariable=plant_type_var1).grid(row=3, column=5, padx=padding_x1, pady=padding_y1)
-
-                b_edit = Button(edit_window, text="Change Values", command=changeInfo).grid(row=4, column=0, padx=padding_x1, pady=padding_y1)
+    def changePlantInfo(data):
+        print(data)
+        name_var1 = StringVar()
+        qty_var1 = StringVar()
+        size_var1 = StringVar()
+        cost_var1 = StringVar()
+        plant_type_var1 = StringVar()
+        def updateBox(*args):
+            print(plant_type_var1.get)
+            size_var1.set('')
+            size_var1['values'] = plant_categories[plant_type.get()]
+            size_var1.current(0)
 
 
 
-
-            ret_entries = []
+        edit_window = Toplevel()
+        padding_x1 = 5
+        padding_y1 =5
+        def changeInfo(name):
             db_name = 'databases/' + str(e3_var.get()) + '.db'
             print(db_name)
             conn = sqlite3.connect(db_name)
             cur = conn.cursor()
-            cur = cur.execute('''SELECT * FROM plants''')
-            data = cur.fetchall()
-            for i in data:
-                p_group = [i[0], i[1], i[2], i[3], i[4]]
-                # print(p_group)
-                ret_entries.append(p_group)
+            cur.execute('''UPDATE plants SET qty = ?, size = ?, cost = ?, plant_type =? WHERE name = ?
+                        ''',(qty_var1.get(), size_var1.get(), cost_var1.get(), plant_type_var1.get(), name))
+            conn.commit()
             conn.close()
-            p_rows = 3
-            for i in ret_entries:
-                print(i)          
-                p_rows = p_rows + 1          
-                Label(plant_edit_window, text= i[0]).grid(row=p_rows, column=0)
-                Label(plant_edit_window, text= i[1]).grid(row=p_rows, column=1)
-                Label(plant_edit_window, text= i[2]).grid(row=p_rows, column=2)
-                Label(plant_edit_window, text= i[3]).grid(row=p_rows, column=3)
-                Label(plant_edit_window, text=ret_entries.index(i)).grid(row=p_rows, column=4)
-                Label(plant_edit_window, text= i[4]).grid(row=p_rows, column=5)
-                Button(plant_edit_window, text="Edit", command=lambda: changePlantInfo(i)).grid(row=p_rows, column=6)
+            edit_window.destroy()
+            plant_edit_window.destroy()
 
+
+            
+
+        Label(edit_window, text= "Plant Name").grid(row=1, column=0, padx=padding_x1, pady=padding_y1)
+        Label(edit_window, text= "Qty").grid(row=1, column=1, padx=padding_x1, pady=padding_y1)
+        Label(edit_window, text= "Cost").grid(row=1, column=2, padx=padding_x1, pady=padding_y1)
+        Label(edit_window, text= "Size").grid(row=1, column=3, padx=padding_x1, pady=padding_y1)
+        Label(edit_window, text= "Cost").grid(row=1, column=5, padx=padding_x1, pady=padding_y1)
+        Label(edit_window, text="Plant Type").grid(row=1, column=2, padx=padding_x1, pady=padding_y1)
+
+
+        new_name = Label(edit_window, text=data[0]).grid(row=2, column=0, padx=padding_x1, pady=padding_y1)
+        new_qty = Entry(edit_window, textvariable=qty_var1).grid(row=2, column=1, padx=padding_x1, pady=padding_y1)
+        new_cost = Entry(edit_window, textvariable=cost_var1).grid(row=2, column=5, padx=padding_x1, pady=padding_y1)
+        plant_type = ttk.Combobox(edit_window, textvariable=plant_type_var1)
+        plant_type['values'] = [key for key in plant_categories.keys()]
+        plant_type.grid(row=2, column=2)
+        plant_type.current(0)
+        
+        plant_type.bind("<<ComboboxSelected>>", lambda event: updateBox())
+        plant_size = ttk.Combobox(edit_window, textvariable=size_var1)
+        plant_size['values'] = plant_categories['container']
+        plant_size.grid(row=2,column=3, padx=padding_x1, pady=padding_y1)
+        plant_size.current(0)
+
+        Button(edit_window, text='Update Information', command=lambda: changeInfo(data[0])).grid(row=3, column=2, padx=padding_x1, pady=padding_y1)
+
+
+    if e1_var.get() != '' and e2_var.get() != '' and e3_var.get() != '':
         plant_edit_window = Toplevel()
         plant_edit_window.title("Plant Edit Window")
         plant_edit_window.geometry('550x500')
+        ret_entries = []
+        db_name = 'databases/' + str(e3_var.get()) + '.db'
+        print(db_name)
+        conn = sqlite3.connect(db_name)
+        cur = conn.cursor()
+        cur = cur.execute('''SELECT * FROM plants''')
+        data = cur.fetchall()
+        for i in data:
+            p_group = [i[0], i[1], i[2], i[3], i[4]]
+            # print(p_group)
+            ret_entries.append(p_group)
+        conn.close()
+        p_rows = 3
+        for i in ret_entries:
+            print(i)          
+            p_rows = p_rows + 1          
+            Label(plant_edit_window, text= i[0]).grid(row=p_rows, column=0)
+            Label(plant_edit_window, text= i[1]).grid(row=p_rows, column=1)
+            Label(plant_edit_window, text= i[2]).grid(row=p_rows, column=2)
+            Label(plant_edit_window, text= i[3]).grid(row=p_rows, column=3)
+            Label(plant_edit_window, text=ret_entries.index(i)).grid(row=p_rows, column=4)
+            Label(plant_edit_window, text= i[4]).grid(row=p_rows, column=5)
+            Button(plant_edit_window, text="Edit", command=lambda: changePlantInfo(i)).grid(row=p_rows, column=6)
+
 
         l1 = Label(plant_edit_window, text="Plant Edit Window").grid(row=0, column = 2)
-        showEntries = Button(plant_edit_window, text="Show Entries", command=show_plants).grid(row=1, column=0)
         header_common_name = Label(plant_edit_window, text='Plant Common Name').grid(row=2, column=0)
         header_qty = Label(plant_edit_window, text='Plant Quantity').grid(row=2, column=1)
         header_size = Label(plant_edit_window, text='Plant Size').grid(row=2, column=2)
@@ -299,10 +369,16 @@ def open_labor_factor_setting_window():
         print(ret_cur)
         conn.close()
 
-
+    db_name = 'databases/' + str(e3_var.get()) + '.db'
+    print(db_name)
+    conn = sqlite3.connect(db_name)
+    cur = conn.cursor()
+    ret_data = cur.execute('''SELECT * FROM labor_factors WHERE ROWID IN ( SELECT max( ROWID ) FROM labor_factors )''').fetchone()
+    ('last entry')
+    print(ret_data)
 #Container Labor Factors
     quart_factor= StringVar()
-    quart_factor.set(base_labor_factors[0])
+    quart_factor.set(ret_data[0])
     gal_factor = StringVar()
     gal_factor.set(base_labor_factors[1])
     twogal_factor = StringVar()
@@ -423,6 +499,8 @@ def open_labor_factor_setting_window():
     Label(laborfactor_setting_window, text='40"-46"').grid(row=9, column=4, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=forty_factor).grid(row=9, column=5, padx=padding_x2, pady=padding_y2)
     Button(laborfactor_setting_window, text='Update Factors', command=updateFactors).grid(row=14, column=2)
+
+    conn.close()
 
 root = Tk()
 
