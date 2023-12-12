@@ -3,9 +3,10 @@ from tkinter import ttk
 from tkinter import messagebox
 import sqlite3
 from openpyxl import Workbook
-
+import window_funcs
 import excel_funcs as eF
-import tkinter_windows as tW
+
+
 
 change_factors = False
 all_entries = []
@@ -520,7 +521,7 @@ e1 = Entry(root, textvariable=e1_var).grid(row=0, column=1, padx=padding_x, pady
 e2 = Entry(root, textvariable=e2_var).grid(row=1, column=1, padx=padding_x, pady=padding_y)
 e3 = Entry(root, textvariable=e3_var).grid(row=2, column=1, padx=padding_x, pady=padding_y)
 
-b1 = Button(root, text='Add Plants', command=tW.open_plant_window(e3_var.get(), e2_var.get(),e1_var.get() )).grid(row=3, column=0, padx=padding_x, pady=padding_y)
+b1 = Button(root, text='Add Plants', command=tkinter_windows.open_plant_window(e3_var.get(), e2_var.get(),e1_var.get() )).grid(row=3, column=0, padx=padding_x, pady=padding_y)
 b11 = Button(root, text='Edit Plants', command=editPlants).grid(row=3, column=1, padx=padding_x, pady=padding_y)
 b2 = Button(root, text='Add Services', command=open_service_window).grid(row=4, column=0, padx=padding_x, pady=padding_y)
 b3 = Button(root, text='Create Excel', command=createExcel).grid(row=5, column=0, padx=padding_x, pady=padding_y)
