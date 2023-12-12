@@ -8,7 +8,7 @@ import excel_funcs as eF
 change_factors = False
 all_entries = []
 
-base_labor_factors = ['0.10', '0.15', '0.20', '0.35', '0.45', '0.50', '0.60', '0.45', '0.75' ,'2.0', '2.5', '3.0', '3.5', '4.0', '2.0', '2.5','3.0', '3.5','4.0','5.0','0.35','0.45','0.55','0.65','0.70','0.80']
+base_labor_factors = ['0.10', '0.15', '0.20', '0.35', '0.45', '0.50', '0.60', '0.45', '0.75' ,'2.0', '2.5', '3.0', '3.5', '4.0', '2.0', '2.5','3.0', '3.5','4.0','5.0','0.35','0.45','0.55','0.65','0.70','0.80', '0.90']
 
 grid_rows = 3
 
@@ -264,6 +264,11 @@ def open_labor_factor_setting_window():
                     ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_9 TEXT,
                     sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_40 TEXT
                     )''')
+        cur.execute('''INSERT INTO labor_factors VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    ''', (base_labor_factors[0],base_labor_factors[1],base_labor_factors[2],base_labor_factors[3],base_labor_factors[4],base_labor_factors[5],base_labor_factors[6],base_labor_factors[7],base_labor_factors[8],
+                          base_labor_factors[9],base_labor_factors[10],base_labor_factors[11],base_labor_factors[12],base_labor_factors[13],
+                          base_labor_factors[14],base_labor_factors[15],base_labor_factors[16],base_labor_factors[17],base_labor_factors[18],base_labor_factors[19],
+                          base_labor_factors[20],base_labor_factors[21],base_labor_factors[22],base_labor_factors[23],base_labor_factors[24],base_labor_factors[25],base_labor_factors[26]))
         conn.commit()
         conn.close()
 
