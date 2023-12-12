@@ -498,7 +498,8 @@ def open_labor_factor_setting_window():
     Entry(laborfactor_setting_window, textvariable=thirtysix_factor).grid(row=8, column=5, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='40"-46"').grid(row=9, column=4, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=forty_factor).grid(row=9, column=5, padx=padding_x2, pady=padding_y2)
-    Button(laborfactor_setting_window, text='Update Factors', command=updateFactors).grid(row=14, column=2)
+
+    Button(laborfactor_setting_window, text='Update Factors', command=updateFactors).grid(row=14, column=2, padx=padding_x2, pady=padding_y2)
 
     conn.close()
 

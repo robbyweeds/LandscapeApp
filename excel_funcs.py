@@ -78,7 +78,7 @@ def createWorkbook(db):
         ws[desc_col] = i[0]
         ws[desc_col].alignment = Alignment(horizontal='center')
         ws[desc_col].border = Border(top=thin_border, left=thin_border, right=thin_border, bottom=thin_border)
-        ws[unit_col] = i[4]
+        ws[unit_col] = i[2]
         ws[unit_col].alignment = Alignment(horizontal='center')
         ws[unit_col].border = Border(top=thin_border, left=thin_border, right=thin_border, bottom=thin_border)
         ws[unit_cost_col] = float(i[3])
