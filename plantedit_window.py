@@ -23,6 +23,7 @@ def editPlants(db, first, last):
 
 
         edit_window = Toplevel()
+        edit_window.title('Edit Window')
         padding_x1 = 5
         padding_y1 =5
         def changeInfo(name):

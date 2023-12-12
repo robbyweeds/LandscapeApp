@@ -4,7 +4,19 @@ import datetime
 import sqlite3
 
 
+def createExcel(db):
+    db_name = 'databases/' + str(db) + '.db'
+    print(db_name)
+    conn = sqlite3.connect(db_name)
+    cur = conn.cursor()
+    cur = cur.execute('''SELECT * FROM plants''')
+    data = cur.fetchall()
+    for i in data:
+        print(i)
 
+
+    createWorkbook(db_name)  
+    conn.close()
 
 def createWorkbook(db):
 
