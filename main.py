@@ -8,6 +8,7 @@ import excel_funcs as eF
 change_factors = False
 all_entries = []
 
+base_labor_factors = ['0.10', '0.15', '0.20', '0.35', '0.45', '0.50', '0.60', '0.45', '0.75' ,'2.0', '2.5', '3.0', '3.5', '4.0', '2.0', '2.5','3.0', '3.5','4.0','5.0','0.35','0.45','0.55','0.65','0.70','0.80']
 
 grid_rows = 3
 
@@ -259,8 +260,8 @@ def open_labor_factor_setting_window():
         conn = sqlite3.connect(db_name)
         cur = conn.cursor()
         cur.execute('''CREATE TABLE IF NOT EXISTS labor_factors (con_qrt TEXT, con_gal TEXT, con_2gal TEXT, con_3gal TEXT, con_5gal TEXT, con_7gal TEXT, con_10gal TEXT, con_15gal TEXT, con_25gal TEXT,
-                    dec_15 TEXT, dec_20 TEXT, dec_25 TEXT, dec_30 TEXT, dec_35 TEXT, dec_40 TEXT,
-                    ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_9 TEXT, ever_10 TEXT,
+                    dec_15 TEXT, dec_20 TEXT, dec_25 TEXT, dec_30 TEXT, dec_35 TEXT,
+                    ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_9 TEXT,
                     sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_40 TEXT
                     )''')
         conn.commit()
@@ -283,36 +284,36 @@ def open_labor_factor_setting_window():
         #             ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_9 TEXT, 
         #             sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_40 TEXT
         #             )''')
-        cur.execute('''INSERT INTO labor_factors VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        cur.execute('''INSERT INTO labor_factors VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                     ''',(quart_factor.get(), gal_factor.get(), twogal_factor.get(), threegal_factor.get(), fivegal_factor.get(), sevengal_factor.get(), tengal_factor.get(), fifteen_factor.get(), twentyfivegal_factor.get(),
                          one5_two_factor.get(), two_two5_factor.get(), two5_three_factor.get(), three_three5_factor.get(), three5_four_factor.get(),
                          four_five_factor.get(), five_six_factor.get(), six_seven_factor.get(), seven_eight_factor.get(), eight_nine_factor.get(), nine_ten_factor.get(),
                          twelve_factor.get(), fifteen_factor.get(), eighteen_factor.get(), twentyfour_factor.get(), thirty_factor.get(), thirtysix_factor.get(), forty_factor.get()))
         conn.commit()
-        ret_cur = cur.execute('''SELECT * FROM labor_factor''').fetchall()
+        ret_cur = cur.execute('''SELECT * FROM labor_factors''').fetchall()
         print(ret_cur)
         conn.close()
 
 
 #Container Labor Factors
     quart_factor= StringVar()
-    quart_factor.set('0.10')
+    quart_factor.set(base_labor_factors[0])
     gal_factor = StringVar()
-    gal_factor.set('0.15')
+    gal_factor.set(base_labor_factors[1])
     twogal_factor = StringVar()
-    twogal_factor.set('0.20')
+    twogal_factor.set(base_labor_factors[2])
     threegal_factor = StringVar()
-    threegal_factor.set('0.35')
+    threegal_factor.set(base_labor_factors[3])
     fivegal_factor = StringVar()
-    fivegal_factor.set('0.45')
+    fivegal_factor.set(base_labor_factors[4])
     sevengal_factor = StringVar()
-    sevengal_factor.set('0.50')
+    sevengal_factor.set(base_labor_factors[5])
     tengal_factor = StringVar()
-    tengal_factor.set('0.60')
+    tengal_factor.set(base_labor_factors[6])
     fifteengal_factor = StringVar()
-    fifteengal_factor.set('0.65')
+    fifteengal_factor.set(base_labor_factors[7])
     twentyfivegal_factor = StringVar()
-    twentyfivegal_factor.set('0.75')
+    twentyfivegal_factor.set(base_labor_factors[8])
     Label(laborfactor_setting_window, text='Container').grid(row=1, column=0, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='Quart').grid(row=2, column=0, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=quart_factor).grid(row=2, column=1, padx=padding_x2, pady=padding_y2)
@@ -335,15 +336,15 @@ def open_labor_factor_setting_window():
 
 #Deciduous Trees Labor Factors
     one5_two_factor= StringVar()
-    one5_two_factor.set('2.0')
+    one5_two_factor.set(base_labor_factors[9])
     two_two5_factor = StringVar()
-    two_two5_factor.set('2.5')
+    two_two5_factor.set(base_labor_factors[10])
     two5_three_factor = StringVar()
-    two5_three_factor.set('3.0')
+    two5_three_factor.set(base_labor_factors[11])
     three_three5_factor = StringVar()
-    three_three5_factor.set('3.5')
+    three_three5_factor.set(base_labor_factors[12])
     three5_four_factor = StringVar()
-    three5_four_factor.set('4.0')
+    three5_four_factor.set(base_labor_factors[13])
     Label(laborfactor_setting_window, text='Deciduous Trees').grid(row=1, column=2, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='1.5"-2"').grid(row=2, column=2, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=one5_two_factor).grid(row=2, column=3, padx=padding_x2, pady=padding_y2)
@@ -358,17 +359,17 @@ def open_labor_factor_setting_window():
 
 #Evergreen Trees Labor Factors
     four_five_factor= StringVar()
-    four_five_factor.set('2.0')
+    four_five_factor.set(base_labor_factors[14])
     five_six_factor = StringVar()
-    five_six_factor.set('2.5')
+    five_six_factor.set(base_labor_factors[15])
     six_seven_factor = StringVar()
-    six_seven_factor.set('3.0')
+    six_seven_factor.set(base_labor_factors[16])
     seven_eight_factor = StringVar()
-    seven_eight_factor.set('3.5')
+    seven_eight_factor.set(base_labor_factors[17])
     eight_nine_factor = StringVar()
-    eight_nine_factor.set('4.0')
+    eight_nine_factor.set(base_labor_factors[18])
     nine_ten_factor = StringVar()
-    nine_ten_factor.set('5.0')
+    nine_ten_factor.set(base_labor_factors[19])
     Label(laborfactor_setting_window, text='Evergreen Trees').grid(row=7, column=2, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text="4'-5'").grid(row=8, column=2, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=four_five_factor).grid(row=8, column=3, padx=padding_x2, pady=padding_y2)
@@ -385,19 +386,19 @@ def open_labor_factor_setting_window():
 
 #shrubs Trees Labor Factors
     twelve_factor= StringVar()
-    twelve_factor.set('0.35')
+    twelve_factor.set(base_labor_factors[20])
     fifteen_factor = StringVar()
-    fifteen_factor.set('0.45')
+    fifteen_factor.set(base_labor_factors[21])
     eighteen_factor = StringVar()
-    eighteen_factor.set('0.55')
+    eighteen_factor.set(base_labor_factors[22])
     twentyfour_factor = StringVar()
-    twentyfour_factor.set('0.65')
+    twentyfour_factor.set(base_labor_factors[23])
     thirty_factor = StringVar()
-    thirty_factor.set('0.65')
+    thirty_factor.set(base_labor_factors[24])
     thirtysix_factor = StringVar()
-    thirtysix_factor.set('0.70')
+    thirtysix_factor.set(base_labor_factors[25])
     forty_factor = StringVar()
-    forty_factor.set('0.75')
+    forty_factor.set(base_labor_factors[26])
 
     Label(laborfactor_setting_window, text='Shrubs').grid(row=1, column=5, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='12"-15"').grid(row=2, column=4, padx=padding_x2, pady=padding_y2)
@@ -414,7 +415,8 @@ def open_labor_factor_setting_window():
     Entry(laborfactor_setting_window, textvariable=thirtysix_factor).grid(row=7, column=5, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='36"-40"').grid(row=8, column=4, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=thirtysix_factor).grid(row=8, column=5, padx=padding_x2, pady=padding_y2)
-
+    Label(laborfactor_setting_window, text='40"-46"').grid(row=9, column=4, padx=padding_x2, pady=padding_y2)
+    Entry(laborfactor_setting_window, textvariable=forty_factor).grid(row=9, column=5, padx=padding_x2, pady=padding_y2)
     Button(laborfactor_setting_window, text='Update Factors', command=updateFactors).grid(row=14, column=2)
 
 root = Tk()
