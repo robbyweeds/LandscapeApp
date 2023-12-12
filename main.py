@@ -25,6 +25,16 @@ def open_plant_window():
     cur = conn.cursor()
 
     cur.execute('''CREATE TABLE IF NOT EXISTS plants (name TEXT, qty TEXT, size TEXT, cost TEXT, plant_type TEXT)''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS labor_factors (con_qrt TEXT, con_gal TEXT, con_2gal TEXT, con_3gal TEXT, con_5gal TEXT, con_7gal TEXT, con_10gal TEXT, con_15gal TEXT, con_25gal TEXT,
+                    dec_15 TEXT, dec_20 TEXT, dec_25 TEXT, dec_30 TEXT, dec_35 TEXT,
+                    ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_9 TEXT,
+                    sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_40 TEXT
+                    )''')
+    cur.execute('''INSERT INTO labor_factors VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    ''', (base_labor_factors[0],base_labor_factors[1],base_labor_factors[2],base_labor_factors[3],base_labor_factors[4],base_labor_factors[5],base_labor_factors[6],base_labor_factors[7],base_labor_factors[8],
+                          base_labor_factors[9],base_labor_factors[10],base_labor_factors[11],base_labor_factors[12],base_labor_factors[13],
+                          base_labor_factors[14],base_labor_factors[15],base_labor_factors[16],base_labor_factors[17],base_labor_factors[18],base_labor_factors[19],
+                          base_labor_factors[20],base_labor_factors[21],base_labor_factors[22],base_labor_factors[23],base_labor_factors[24],base_labor_factors[25],base_labor_factors[26]))
     conn.commit()
     ret_data1 = cur.execute('''SELECT * FROM plants''').fetchall()
     p_rows = 3
@@ -37,9 +47,6 @@ def open_plant_window():
         Label(plant_window, text=ret_data1.index(i)).grid(row=p_rows, column=4)
         Label(plant_window, text= i[3]).grid(row=p_rows, column=5)
     conn.close()
-
-
-
 
 
     def addPlant(window):
@@ -327,20 +334,6 @@ def open_labor_factor_setting_window():
         setting_title = Label(laborfactor_setting_window, text='Labor Factors').grid(row=0,column=2)
         db_name = 'databases/' + str(e3_var.get()) + '.db'
         print(db_name)
-        conn = sqlite3.connect(db_name)
-        cur = conn.cursor()
-        cur.execute('''CREATE TABLE IF NOT EXISTS labor_factors (con_qrt TEXT, con_gal TEXT, con_2gal TEXT, con_3gal TEXT, con_5gal TEXT, con_7gal TEXT, con_10gal TEXT, con_15gal TEXT, con_25gal TEXT,
-                    dec_15 TEXT, dec_20 TEXT, dec_25 TEXT, dec_30 TEXT, dec_35 TEXT,
-                    ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_9 TEXT,
-                    sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_40 TEXT
-                    )''')
-        cur.execute('''INSERT INTO labor_factors VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-                    ''', (base_labor_factors[0],base_labor_factors[1],base_labor_factors[2],base_labor_factors[3],base_labor_factors[4],base_labor_factors[5],base_labor_factors[6],base_labor_factors[7],base_labor_factors[8],
-                          base_labor_factors[9],base_labor_factors[10],base_labor_factors[11],base_labor_factors[12],base_labor_factors[13],
-                          base_labor_factors[14],base_labor_factors[15],base_labor_factors[16],base_labor_factors[17],base_labor_factors[18],base_labor_factors[19],
-                          base_labor_factors[20],base_labor_factors[21],base_labor_factors[22],base_labor_factors[23],base_labor_factors[24],base_labor_factors[25],base_labor_factors[26]))
-        conn.commit()
-        conn.close()
 
         padding_x2 = 5
         padding_y2 = 5
@@ -354,11 +347,11 @@ def open_labor_factor_setting_window():
         print(db_name)
         conn = sqlite3.connect(db_name)
         cur = conn.cursor()
-        # cur.execute('''CREATE TABLE IF NOT EXISTS labor_factors (con_qrt TEXT, con_gal TEXT, con_2gal TEXT, con_3gal TEXT, con_5gal TEXT, con_7gal TEXT, con_10gal TEXT, con_15gal TEXT, con_25gal TEXT,
-        #             dec_15 TEXT, dec_20 TEXT, dec_25 TEXT, dec_30 TEXT, dec_35 TEXT,
-        #             ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_9 TEXT, 
-        #             sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_40 TEXT
-        #             )''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS labor_factors (con_qrt TEXT, con_gal TEXT, con_2gal TEXT, con_3gal TEXT, con_5gal TEXT, con_7gal TEXT, con_10gal TEXT, con_15gal TEXT, con_25gal TEXT,
+                    dec_15 TEXT, dec_20 TEXT, dec_25 TEXT, dec_30 TEXT, dec_35 TEXT,
+                    ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_9 TEXT,
+                    sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_40 TEXT
+                    )''')
         cur.execute('''INSERT INTO labor_factors VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                     ''',(quart_factor.get(), gal_factor.get(), twogal_factor.get(), threegal_factor.get(), fivegal_factor.get(), sevengal_factor.get(), tengal_factor.get(), fifteen_factor.get(), twentyfivegal_factor.get(),
                          one5_two_factor.get(), two_two5_factor.get(), two5_three_factor.get(), three_three5_factor.get(), three5_four_factor.get(),
