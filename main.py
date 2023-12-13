@@ -13,7 +13,7 @@ from hard_coding import *
 change_factors = False
 
 root = Tk()
-
+root.iconbitmap('Shearon Logo.ico')
 root.title('Bid Sheet')
 
 e1_var = StringVar()

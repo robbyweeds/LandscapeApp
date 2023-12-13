@@ -18,6 +18,7 @@ from hard_coding import *
 def open_plant_window(db, last, first):
     
     plant_window = Toplevel()
+    plant_window.iconbitmap('Shearon Logo.ico')
     db_name = 'databases/' + str(db) + '.db'
     print(db_name)
     conn = sqlite3.connect(db_name)

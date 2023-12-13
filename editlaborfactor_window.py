@@ -11,6 +11,7 @@ def open_labor_factor_setting_window(db, first, last):
         
 
         laborfactor_setting_window = Toplevel()
+        laborfactor_setting_window.iconbitmap('Shearon Logo.ico')
         laborfactor_setting_window.title('Settings')
         setting_title = Label(laborfactor_setting_window, text='Labor Factors').grid(row=0,column=2)
         db_name = 'databases/' + str(db) + '.db'

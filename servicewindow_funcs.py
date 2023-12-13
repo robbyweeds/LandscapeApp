@@ -45,6 +45,7 @@ def open_service_window(db, first, last):
 
 
     service_window = Toplevel()
+    service_window.iconbitmap('Shearon Logo.ico')
     service_window.title('Services')
     service_window.geometry('700x700')
 
