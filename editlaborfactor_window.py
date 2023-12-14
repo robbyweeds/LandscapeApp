@@ -22,8 +22,63 @@ def open_labor_factor_setting_window(db, first, last):
     else:
         messagebox.showwarning("showwarning", "Missing Fields")
 
+    def resetDefaultFactors():
+        print('update factors')
+        db_name = 'databases/' + str(db) + '.db'
+        print(db_name)
+        quart_factor.set(base_factors_dict["quart"])
+        gal_factor.set(base_factors_dict["1gal"])
+        twogal_factor.set(base_factors_dict["2gal"])
+        threegal_factor.set(base_factors_dict["3gal"])
+        fivegal_factor.set(base_factors_dict["5gal"])
+        sevengal_factor.set(base_factors_dict["7gal"])
+        tengal_factor.set(base_factors_dict["10gal"])
+        fifteengal_factor.set(base_factors_dict["15gal"])
+        twentyfivegal_factor.set(base_factors_dict["25gal"])
+
+        one5_two_factor.set(base_factors_dict["one5inch"])
+        two_two5_factor.set(base_factors_dict["twoinch"])
+        two5_three_factor.set(base_factors_dict["two5inch"])
+        three_three5_factor.set(base_factors_dict["threeinch"])
+        three5_four_factor.set(base_factors_dict["three5inch"])
+        four_four5_factor.set(base_factors_dict["fourinch"])
+        four5_five_factor.set(base_factors_dict["four5inch"])
+        five_six_factor.set(base_factors_dict["fiveinch"])
+        six_seven_factor.set(base_factors_dict["sixinch"])
+        seven_eight_factor.set(base_factors_dict["seveninch"])
+
+        evfour_five_factor.set(base_factors_dict["four5"])
+        evfive_six_factor.set(base_factors_dict["five6"])
+        evsix_seven_factor.set(base_factors_dict["six7"])
+        evseven_eight_factor.set(base_factors_dict["seven8"])
+        eveight_ten_factor.set(base_factors_dict["eight10"])
+        evten_twelve_factor.set(base_factors_dict["ten12"])
+        evtwelve_fourteen_factor.set(base_factors_dict["twelve14"])
+        evfourteen_sixteen_factor.set(base_factors_dict["fourteen16"])
+
+        twelve_factor.set(base_factors_dict["twelve"])
+        fifteen_factor.set(base_factors_dict["fifteen"])
+        eighteen_factor.set(base_factors_dict["eighteen"])
+        twentyfour_factor.set(base_factors_dict["twentyfour"])
+        thirty_factor.set(base_factors_dict["thirty"])
+        thirtysix_factor.set(base_factors_dict["thirtysix"])
+        fortyeight_factor.set(base_factors_dict["fortyeight"])
+
+
+        conn = sqlite3.connect(db_name)
+        cur = conn.cursor()
+        cur.execute('''INSERT INTO labor_factors VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    ''',(quart_factor.get(), gal_factor.get(), twogal_factor.get(), threegal_factor.get(), fivegal_factor.get(), sevengal_factor.get(), tengal_factor.get(), fifteen_factor.get(), twentyfivegal_factor.get(),
+                         one5_two_factor.get(), two_two5_factor.get(), two5_three_factor.get(), three_three5_factor.get(), three5_four_factor.get(), four_four5_factor.get(), four5_five_factor.get(), five_six_factor.get(), six_seven_factor.get(), seven_eight_factor.get(),
+                         evfour_five_factor.get(), evfive_six_factor.get(), evsix_seven_factor.get(), evseven_eight_factor.get(), eveight_ten_factor.get(), evten_twelve_factor.get(), evtwelve_fourteen_factor.get(), evfourteen_sixteen_factor.get(),
+                         twelve_factor.get(), fifteen_factor.get(), eighteen_factor.get(), twentyfour_factor.get(), thirty_factor.get(), thirtysix_factor.get(), fortyeight_factor.get()))
+        conn.commit()
+
+        conn.close()
+
+
     def updateFactors():
-        change_factors = True
+        
         print('update factors')
         db_name = 'databases/' + str(db) + '.db'
         print(db_name)
@@ -49,6 +104,11 @@ def open_labor_factor_setting_window(db, first, last):
     print(db_name)
     conn = sqlite3.connect(db_name)
     cur = conn.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS labor_factors (con_qrt TEXT, con_gal TEXT, con_2gal TEXT, con_3gal TEXT, con_5gal TEXT, con_7gal TEXT, con_10gal TEXT, con_15gal TEXT, con_25gal TEXT,
+                    dec_15 TEXT, dec_20 TEXT, dec_25 TEXT, dec_30 TEXT, dec_35 TEXT, dec_40 TEXT, dec_45 TEXT, dec_50 TEXT, dec_60 TEXT, dec_70 TEXT,
+                    ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_10 TEXT, ever_12 TEXT, ever_14 TEXT,
+                    sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_48 TEXT
+                    )''')
     ret_data = cur.execute('''SELECT * FROM labor_factors WHERE ROWID IN ( SELECT max( ROWID ) FROM labor_factors )''').fetchone()
     ('last entry')
     print(ret_data)
@@ -171,8 +231,8 @@ def open_labor_factor_setting_window(db, first, last):
     Label(laborfactor_setting_window, text='48"-46"').grid(row=9, column=4, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=fortyeight_factor).grid(row=9, column=5, padx=padding_x2, pady=padding_y2)
 
-    Button(laborfactor_setting_window, text='Update Factors', command=updateFactors).grid(row=19, column=5, padx=padding_x2, pady=padding_y2)
-
+    Button(laborfactor_setting_window, text='Save Factors', command=updateFactors).grid(row=19, column=5, padx=padding_x2, pady=padding_y2)
+    Button(laborfactor_setting_window, text='Reset Deffault Factors', command=resetDefaultFactors).grid(row=19, column=4, padx=padding_x2, pady=padding_y2)
 
     laborfactor_data = cur.execute('''SELECT * FROM labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchone()
     if laborfactor_data == None:

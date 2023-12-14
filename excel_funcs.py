@@ -83,6 +83,7 @@ def createWorkbook(db):
                     sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_48 TEXT
                     )''')
     laborfactor_data = cur.execute('''SELECT * FROM labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchone()
+    
     if laborfactor_data == None:
         print('try')
 
@@ -95,8 +96,47 @@ def createWorkbook(db):
         conn.commit()
         laborfactor_data = cur.execute('''SELECT * FROM labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchall()
         print('except')
+
     print('labor factor data is', laborfactor_data)
     plant_data = cur.execute('''SELECT * FROM plants''').fetchall()
+
+    db_labor_factors = {
+                "quart" : laborfactor_data[0],
+                "1gal" : laborfactor_data[1],
+                "2gal" : laborfactor_data[2],
+                "3gal" : laborfactor_data[3],
+                "5gal"  : laborfactor_data[4],
+                "7gal" : laborfactor_data[5],
+                "10gal" : laborfactor_data[6],
+                "15gal" : laborfactor_data[7],
+                "25gal" : laborfactor_data[8],
+                "dec_15" : laborfactor_data[9],
+                "dec_20" : laborfactor_data[10],
+                "dec_25" : laborfactor_data[11],
+                "dec_30" : laborfactor_data[12],
+                "dec_35" : laborfactor_data[13],
+                "dec_40" : laborfactor_data[14],
+                "dec_45" : laborfactor_data[15],
+                "dec_50" : laborfactor_data[16],
+                "dec_60" : laborfactor_data[17],
+                "dec_70" : laborfactor_data[18],
+                "ev_4" : laborfactor_data[19],
+                "ev_5" : laborfactor_data[20],
+                "ev_6" : laborfactor_data[21],
+                "ev_7" : laborfactor_data[22],
+                "ev_8" : laborfactor_data[23],
+                "ev_10" : laborfactor_data[24],
+                "ev_12" : laborfactor_data[25],
+                "ev_14" : laborfactor_data[26],
+                "sh_12" : laborfactor_data[27],
+                "sh_15" : laborfactor_data[28],
+                "sh_18" : laborfactor_data[29],
+                "sh_24" : laborfactor_data[30],
+                "sh_30" : laborfactor_data[31],
+                "sh_36" : laborfactor_data[32],
+                "sh_48" : laborfactor_data[33]
+                }
+    print(db_labor_factors)
 
     plantrows = len(plant_data)
 
