@@ -2,21 +2,26 @@ from openpyxl import Workbook
 from openpyxl.styles import Border, Side, PatternFill, Font, Alignment, numbers, colors
 import datetime
 import sqlite3
+from hard_coding import *
 
 
-def createExcel(db):
+
+def createExcel(db, last, first):
+    
     db_name = 'databases/' + str(db) + '.db'
     print(db_name)
     conn = sqlite3.connect(db_name)
     cur = conn.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS plants (name TEXT, qty TEXT, size TEXT, cost TEXT, plant_type TEXT)''')
     cur = cur.execute('''SELECT * FROM plants''')
     data = cur.fetchall()
     for i in data:
         print(i)
 
-
     createWorkbook(db_name)  
     conn.close()
+
+
 
 def createWorkbook(db):
 
@@ -71,7 +76,26 @@ def createWorkbook(db):
     conn = sqlite3.connect(db)
 
     cur = conn.cursor()
+    
+    cur.execute('''CREATE TABLE IF NOT EXISTS labor_factors (con_qrt TEXT, con_gal TEXT, con_2gal TEXT, con_3gal TEXT, con_5gal TEXT, con_7gal TEXT, con_10gal TEXT, con_15gal TEXT, con_25gal TEXT,
+                    dec_15 TEXT, dec_20 TEXT, dec_25 TEXT, dec_30 TEXT, dec_35 TEXT, dec_40 TEXT, dec_45 TEXT, dec_50 TEXT, dec_60 TEXT, dec_70 TEXT,
+                    ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_10 TEXT, ever_12 TEXT, ever_14 TEXT,
+                    sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_48 TEXT
+                    )''')
+    laborfactor_data = cur.execute('''SELECT * FROM labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchone()
+    if laborfactor_data == None:
+        print('try')
 
+
+        cur.execute('''INSERT INTO labor_factors VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    ''',(base_factors_dict['quart'], base_factors_dict['1gal'],base_factors_dict['2gal'], base_factors_dict['3gal'], base_factors_dict['5gal'], base_factors_dict['7gal'], base_factors_dict['10gal'], base_factors_dict['15gal'], base_factors_dict['25gal'],
+                         base_factors_dict['one5inch'], base_factors_dict['twoinch'], base_factors_dict['two5inch'], base_factors_dict['threeinch'], base_factors_dict['three5inch'], base_factors_dict['fourinch'], base_factors_dict['four5inch'], base_factors_dict['fiveinch'], base_factors_dict['sixinch'], base_factors_dict['seveninch'],
+                         base_factors_dict['four5'], base_factors_dict['five6'], base_factors_dict['six7'], base_factors_dict['seven8'],base_factors_dict['eight10'], base_factors_dict['ten12'], base_factors_dict['twelve14'], base_factors_dict['fourteen16'],
+                         base_factors_dict['twelve'], base_factors_dict['fifteen'], base_factors_dict['eighteen'], base_factors_dict['twentyfour'], base_factors_dict['thirty'],base_factors_dict['thirtysix'], base_factors_dict['fortyeight']))
+        conn.commit()
+        laborfactor_data = cur.execute('''SELECT * FROM labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchall()
+        print('except')
+    print('labor factor data is', laborfactor_data)
     plant_data = cur.execute('''SELECT * FROM plants''').fetchall()
 
     plantrows = len(plant_data)
