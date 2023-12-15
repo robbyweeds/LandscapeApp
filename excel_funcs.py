@@ -82,6 +82,7 @@ def createWorkbook(db):
                     ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_10 TEXT, ever_12 TEXT, ever_14 TEXT,
                     sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_48 TEXT
                     )''')
+    
     laborfactor_data = cur.execute('''SELECT * FROM labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchone()
     
     if laborfactor_data == None:
@@ -94,7 +95,7 @@ def createWorkbook(db):
                          base_factors_dict['four5'], base_factors_dict['five6'], base_factors_dict['six7'], base_factors_dict['seven8'],base_factors_dict['eight10'], base_factors_dict['ten12'], base_factors_dict['twelve14'], base_factors_dict['fourteen16'],
                          base_factors_dict['twelve'], base_factors_dict['fifteen'], base_factors_dict['eighteen'], base_factors_dict['twentyfour'], base_factors_dict['thirty'],base_factors_dict['thirtysix'], base_factors_dict['fortyeight']))
         conn.commit()
-        laborfactor_data = cur.execute('''SELECT * FROM labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchall()
+        laborfactor_data = cur.execute('''SELECT * FROM labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchone()
         print('except')
 
     print('labor factor data is', laborfactor_data)

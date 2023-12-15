@@ -14,6 +14,14 @@ from hard_coding import *
 #             'evergreen trees':["4'-5'", "5'-6'", "6'-7'", "7'-8'", "8'-9'", "9'-10'"],
 #             'shrubs': ['12"-15"', '15"-18"', '18"-24"', '24"-30"', '30"-36"', '36"-40"']}
 # grid_rows = 3
+header_font = ("Helvetica", 12)
+
+# style = ttk.Style()
+# style.configure("Custom.TButton",
+#                          foreground="black",
+#                          background="white",
+#                          padding=[10, 10, 10, 10],
+#                          font="Calibri")
 
 def open_plant_window(db, last, first):
     plant_window = Toplevel()
@@ -78,17 +86,17 @@ def open_plant_window(db, last, first):
         plant_rows = IntVar(plant_window, value=3, name='plantrows')
         plant_window.title('Plant Selection')
         plant_window.geometry('800x700')
-        plant_window_title = Label(plant_window, text='Plant Chart').grid(row=0, column=2)
-        add_plant = Button(plant_window, text='Add Plant Info', command=lambda: addPlant(plant_window)).grid(row=1, column=0)
+        plant_window_title = Label(plant_window, text='Plant Chart', font=("Helvetica", 18)).grid(row=0, column=2)
+        add_plant = Button(plant_window, text='Add Plant Info', command=lambda: addPlant(plant_window), font=("Calibri", 12)).grid(row=1, column=0)
         # save_and_Exit = Button(plant_window, text='Save and Exit', command=lambda: saveExit()).grid(row=1, column=5)
     #names of plant selection columns
         
-        header_common_name = Label(plant_window, text='Plant Common Name').grid(row=2, column=0)
-        header_qty = Label(plant_window, text='Plant Quantity').grid(row=2, column=1)
-        header_plant_type = Label(plant_window, text='Plant Type').grid(row=2, column=2)
-        header_size = Label(plant_window, text='Plant Size').grid(row=2, column=3)
-        row_num = Label(plant_window, text='Row #').grid(row=2, column=4)
-        header_cost = Label(plant_window, text='Plant Cost').grid(row=2, column=5)
+        header_common_name = Label(plant_window, text='Plant Common Name', font=header_font).grid(row=2, column=0)
+        header_qty = Label(plant_window, text='Plant Quantity', font=header_font).grid(row=2, column=1)
+        header_plant_type = Label(plant_window, text='Plant Type', font=header_font).grid(row=2, column=2)
+        header_size = Label(plant_window, text='Plant Size', font=header_font).grid(row=2, column=3)
+        row_num = Label(plant_window, text='Row #', font=header_font).grid(row=2, column=4)
+        header_cost = Label(plant_window, text='Plant Cost', font=header_font).grid(row=2, column=5)
         
 
         name_var = StringVar()
