@@ -5,6 +5,7 @@ import sqlite3
 from openpyxl import Workbook
 # import plantwindow_funcs as wF
 import editlaborfactor_window as lF
+import editservicefactor_window as sFF
 import plantedit_window as pE
 import servicewindow_funcs as sF
 import excel_funcs as eF
@@ -56,7 +57,7 @@ setting_menu.add_command(
     )
 setting_menu.add_command(
     label='Service Factors',
-    command=lambda: lF.open_service_factor_setting_window(e3_var.get(), e2_var.get(),e1_var.get() )
+    command=lambda: sFF.open_service_factor_setting_window(e3_var.get(), e2_var.get(),e1_var.get() )
     )
 
 root_menu.add_cascade(
