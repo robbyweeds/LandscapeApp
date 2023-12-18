@@ -6,6 +6,9 @@ from openpyxl import workbook
 import excel_funcs as eF
 from hard_coding import *
 
+header_font = ("Helvetica", 14)
+header2_font = ("Helvetica", 12)
+
 def editPlants(db, first, last):
     def changePlantInfo(data):
         print(data)
