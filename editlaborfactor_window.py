@@ -6,6 +6,9 @@ from openpyxl import workbook
 import excel_funcs as eF
 from hard_coding import *
 
+header_font = ("Helvetica", 14)
+header2_font = ("Helvetica", 12)
+
 def open_labor_factor_setting_window(db, first, last):
     if first != '' and last != '' and db != '':
         
@@ -13,7 +16,7 @@ def open_labor_factor_setting_window(db, first, last):
         laborfactor_setting_window = Toplevel()
         laborfactor_setting_window.iconbitmap('Shearon Logo.ico')
         laborfactor_setting_window.title('Settings')
-        setting_title = Label(laborfactor_setting_window, text='Labor Factors').grid(row=0,column=2)
+        setting_title = Label(laborfactor_setting_window, text='Labor Factors', font=header_font).grid(row=0,column=2)
         db_name = 'databases/' + str(db) + '.db'
         print(db_name)
 
@@ -23,7 +26,7 @@ def open_labor_factor_setting_window(db, first, last):
         messagebox.showwarning("showwarning", "Missing Fields")
 
     def resetDefaultFactors():
-        print('update factors')
+        print('update default labor factors')
         db_name = 'databases/' + str(db) + '.db'
         print(db_name)
         quart_factor.set(base_factors_dict["quart"])
@@ -112,7 +115,7 @@ def open_labor_factor_setting_window(db, first, last):
                     sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_48 TEXT
                     )''')
     ret_data = cur.execute('''SELECT * FROM labor_factors WHERE ROWID IN ( SELECT max( ROWID ) FROM labor_factors )''').fetchone()
-    ('last entry')
+    
     print(ret_data)
 #Container Labor Factors
     quart_factor= StringVar()
@@ -124,7 +127,7 @@ def open_labor_factor_setting_window(db, first, last):
     tengal_factor = StringVar()
     fifteengal_factor = StringVar()
     twentyfivegal_factor = StringVar()
-    Label(laborfactor_setting_window, text='Container').grid(row=1, column=0, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text='Container', font=header2_font).grid(row=1, column=0, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='Quart').grid(row=2, column=0, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=quart_factor).grid(row=2, column=1, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='Gallon').grid(row=3, column=0, padx=padding_x2, pady=padding_y2)
@@ -156,14 +159,14 @@ def open_labor_factor_setting_window(db, first, last):
     six_seven_factor = StringVar()
     seven_eight_factor = StringVar()
 
-    Label(laborfactor_setting_window, text='Deciduous Trees').grid(row=1, column=2, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text='Deciduous Trees', font=header2_font).grid(row=1, column=2, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='1.5"-2"').grid(row=2, column=2, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=one5_two_factor).grid(row=2, column=3, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='2"-2.5"').grid(row=3, column=2, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=two_two5_factor).grid(row=3, column=3, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='2.5"-3"').grid(row=4, column=2, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=two5_three_factor).grid(row=4, column=3, padx=padding_x2, pady=padding_y2)
-    Label(laborfactor_setting_window, text='3"-3.5""').grid(row=5, column=2, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text='3"-3.5"').grid(row=5, column=2, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=three_three5_factor).grid(row=5, column=3, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='3.5"-4"').grid(row=6, column=2, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=three5_four_factor).grid(row=6, column=3, padx=padding_x2, pady=padding_y2)
@@ -188,23 +191,23 @@ def open_labor_factor_setting_window(db, first, last):
     evten_twelve_factor = StringVar()
     evtwelve_fourteen_factor = StringVar()
     evfourteen_sixteen_factor = StringVar()
-    Label(laborfactor_setting_window, text='Evergreen Trees').grid(row=7, column=2, padx=padding_x2, pady=padding_y2)
-    Label(laborfactor_setting_window, text="4'-5'").grid(row=11, column=2, padx=padding_x2, pady=padding_y2)
-    Entry(laborfactor_setting_window, textvariable=evfour_five_factor).grid(row=11, column=3, padx=padding_x2, pady=padding_y2)
-    Label(laborfactor_setting_window, text="5'-6'").grid(row=12, column=2, padx=padding_x2, pady=padding_y2)
-    Entry(laborfactor_setting_window, textvariable=evfive_six_factor).grid(row=12, column=3, padx=padding_x2, pady=padding_y2)
-    Label(laborfactor_setting_window, text="6'-7'").grid(row=13, column=2, padx=padding_x2, pady=padding_y2)
-    Entry(laborfactor_setting_window, textvariable=evsix_seven_factor).grid(row=13, column=3, padx=padding_x2, pady=padding_y2)
-    Label(laborfactor_setting_window, text="7'-8'").grid(row=14, column=2, padx=padding_x2, pady=padding_y2)
-    Entry(laborfactor_setting_window, textvariable=evseven_eight_factor).grid(row=14, column=3, padx=padding_x2, pady=padding_y2)
-    Label(laborfactor_setting_window, text="8'-10'").grid(row=15, column=2, padx=padding_x2, pady=padding_y2)
-    Entry(laborfactor_setting_window, textvariable=eveight_ten_factor).grid(row=15, column=3, padx=padding_x2, pady=padding_y2)
-    Label(laborfactor_setting_window, text="10'-12'").grid(row=16, column=2, padx=padding_x2, pady=padding_y2)
-    Entry(laborfactor_setting_window, textvariable=evten_twelve_factor).grid(row=16, column=3, padx=padding_x2, pady=padding_y2)
-    Label(laborfactor_setting_window, text="12'-14'").grid(row=17, column=2, padx=padding_x2, pady=padding_y2)
-    Entry(laborfactor_setting_window, textvariable=evtwelve_fourteen_factor).grid(row=17, column=3, padx=padding_x2, pady=padding_y2)
-    Label(laborfactor_setting_window, text="14'-16'").grid(row=18, column=2, padx=padding_x2, pady=padding_y2)
-    Entry(laborfactor_setting_window, textvariable=evfourteen_sixteen_factor).grid(row=18, column=3, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text='Evergreen Trees', font=header2_font).grid(row=11, column=2, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text="4'-5'").grid(row=12, column=2, padx=padding_x2, pady=padding_y2)
+    Entry(laborfactor_setting_window, textvariable=evfour_five_factor).grid(row=12, column=3, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text="5'-6'").grid(row=13, column=2, padx=padding_x2, pady=padding_y2)
+    Entry(laborfactor_setting_window, textvariable=evfive_six_factor).grid(row=13, column=3, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text="6'-7'").grid(row=14, column=2, padx=padding_x2, pady=padding_y2)
+    Entry(laborfactor_setting_window, textvariable=evsix_seven_factor).grid(row=14, column=3, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text="7'-8'").grid(row=15, column=2, padx=padding_x2, pady=padding_y2)
+    Entry(laborfactor_setting_window, textvariable=evseven_eight_factor).grid(row=15, column=3, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text="8'-10'").grid(row=16, column=2, padx=padding_x2, pady=padding_y2)
+    Entry(laborfactor_setting_window, textvariable=eveight_ten_factor).grid(row=16, column=3, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text="10'-12'").grid(row=17, column=2, padx=padding_x2, pady=padding_y2)
+    Entry(laborfactor_setting_window, textvariable=evten_twelve_factor).grid(row=17, column=3, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text="12'-14'").grid(row=18, column=2, padx=padding_x2, pady=padding_y2)
+    Entry(laborfactor_setting_window, textvariable=evtwelve_fourteen_factor).grid(row=18, column=3, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text="14'-16'").grid(row=19, column=2, padx=padding_x2, pady=padding_y2)
+    Entry(laborfactor_setting_window, textvariable=evfourteen_sixteen_factor).grid(row=19, column=3, padx=padding_x2, pady=padding_y2)
 
 #shrubs Trees Labor Factors
     twelve_factor= StringVar()
@@ -215,7 +218,7 @@ def open_labor_factor_setting_window(db, first, last):
     thirtysix_factor = StringVar()
     fortyeight_factor = StringVar()
 
-    Label(laborfactor_setting_window, text='Shrubs').grid(row=1, column=5, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text='Shrubs', font=header2_font).grid(row=1, column=5, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='12"-15"').grid(row=2, column=4, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=twelve_factor).grid(row=2, column=5, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='15"-18"').grid(row=3, column=4, padx=padding_x2, pady=padding_y2)
@@ -233,8 +236,8 @@ def open_labor_factor_setting_window(db, first, last):
     Label(laborfactor_setting_window, text='48"-46"').grid(row=9, column=4, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=fortyeight_factor).grid(row=9, column=5, padx=padding_x2, pady=padding_y2)
 
-    Button(laborfactor_setting_window, text='Save Factors', command=updateFactors).grid(row=19, column=5, padx=padding_x2, pady=padding_y2)
-    Button(laborfactor_setting_window, text='Reset Deffault Factors', command=resetDefaultFactors).grid(row=19, column=4, padx=padding_x2, pady=padding_y2)
+    Button(laborfactor_setting_window, text='Save Factors', command=updateFactors).grid(row=20, column=5, padx=padding_x2, pady=padding_y2)
+    Button(laborfactor_setting_window, text='Reset Deffault Factors', command=resetDefaultFactors).grid(row=20, column=4, padx=padding_x2, pady=padding_y2)
 
     laborfactor_data = cur.execute('''SELECT * FROM labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchone()
     if laborfactor_data == None:
