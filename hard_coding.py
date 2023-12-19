@@ -45,4 +45,17 @@ base_factors_dict = {
         "fortyeight" : "0.45"
                         }
 
+base_service_factors = {
+        "mulch_1yard" : "0.85",
+        "soil_1yard" : "0.85",
+        "stone_1yard" : "0.85",
+        "pipe_4inchx10ft" : "2.0",
+        "tilling_100sqft" : "0.2",
+        "sod_500sqft_unpreppped" : "4.5",
+        "sod_500sqft_prepped" : "1.1",
+        "flagstone_100sqft_4inchbase" : "7.5",
+        "paver_100sqft_4inchbase" : "9.0",
+        "sodcutter_100sqft" : "0.5"
+                        }
+
 grid_rows = 3

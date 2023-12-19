@@ -174,7 +174,39 @@ def createWorkbook(db):
         ws[manhour_col].alignment = Alignment(horizontal='center')
         ws[manhour_col].border = Border(top=thin_border, left=thin_border, right=thin_border, bottom=thin_border)
 
-    
+    # Rows of services
+    service_header_row = plantrows + 8
+
+    ws['B' + str(service_header_row)]= 'qty'
+    ws['B' + str(service_header_row)].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
+    ws['B' + str(service_header_row)].alignment = Alignment(horizontal='center')
+    ws['B' + str(service_header_row)].font = Font(bold=True, size= 12)
+    ws['C' + str(service_header_row)] = 'Labor Operations'
+    ws['C' + str(service_header_row)].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
+    ws['C' + str(service_header_row)].alignment = Alignment(horizontal='center')
+    ws['C' + str(service_header_row)].font = Font(bold=True, size= 12)
+    ws['D' + str(service_header_row)] = 'unit'
+    ws['D' + str(service_header_row)].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
+    ws['D' + str(service_header_row)].alignment = Alignment(horizontal='center')
+    ws['D' + str(service_header_row)].font = Font(bold=True, size= 12)
+    ws['E' + str(service_header_row)] = 'unit cost'
+    ws['E' + str(service_header_row)].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
+    ws['E' + str(service_header_row)].alignment = Alignment(horizontal='center')
+    ws['E' + str(service_header_row)].font = Font(bold=True, size= 12)
+    ws['F' + str(service_header_row)] = 'ext cost'
+    ws['F' + str(service_header_row)].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
+    ws['F' + str(service_header_row)].alignment = Alignment(horizontal='center')
+    ws['F' + str(service_header_row)].font = Font(bold=True, size= 12)
+    ws['G' + str(service_header_row)] = 'labor factor'
+    ws['G' + str(service_header_row)].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
+    ws['G' + str(service_header_row)].alignment = Alignment(horizontal='center')
+    ws['G' + str(service_header_row)].font = Font(bold=True, size= 12)
+    ws['H' + str(service_header_row)] = 'man hours'
+    ws['H' + str(service_header_row)].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
+    ws['H' + str(service_header_row)].alignment = Alignment(horizontal='center')
+    ws['H' + str(service_header_row)].font = Font(bold=True, size= 12)
+
+    # ROWS OF TOTALS
     direct_row = 'C' + str(plantrows+ 10)
     ws[direct_row] = 'DIRECT COST LABOR'
     ws[direct_row].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thin_border)

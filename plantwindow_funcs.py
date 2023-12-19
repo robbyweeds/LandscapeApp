@@ -47,7 +47,9 @@ def open_plant_window(db, last, first):
         Label(plant_window, text= i[3]).grid(row=p_rows, column=5)
     conn.close()
 
-
+    def saveExit():
+        plant_window.destroy()
+        
     def addPlant(window):
         if name_var.get() != '' and qty_var.get() != '' and cost_var.get() != '' and size_var.get() != '' and plant_type_var.get() != '':
 
@@ -87,8 +89,8 @@ def open_plant_window(db, last, first):
         plant_window.title('Plant Selection')
         plant_window.geometry('800x700')
         plant_window_title = Label(plant_window, text='Plant Chart', font=("Helvetica", 18)).grid(row=0, column=2)
-        add_plant = Button(plant_window, text='Add Plant Info', command=lambda: addPlant(plant_window), font=("Calibri", 12)).grid(row=1, column=0)
-        # save_and_Exit = Button(plant_window, text='Save and Exit', command=lambda: saveExit()).grid(row=1, column=5)
+        add_plant = Button(plant_window, text='Add Plant Info', command=lambda: addPlant(plant_window), font=("Calibri", 12)).grid(row=1, column=4)
+        save_and_Exit = Button(plant_window, text='Save and Exit', command=lambda: saveExit()).grid(row=1, column=5)
     #names of plant selection columns
         
         header_common_name = Label(plant_window, text='Plant Common Name', font=header_font).grid(row=2, column=0)
