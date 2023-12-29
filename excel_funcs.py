@@ -13,10 +13,11 @@ def createExcel(db, last, first):
     conn = sqlite3.connect(db_name)
     cur = conn.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS plants (name TEXT, qty TEXT, size TEXT, cost TEXT, plant_type TEXT)''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS services (name TEXT, material TEXT, mat_cost TEXT, manhours TEXT)''')
     cur = cur.execute('''SELECT * FROM plants''')
     data = cur.fetchall()
-    for i in data:
-        print(i)
+    # for i in data:
+    #     print(i)
 
     createWorkbook(db_name)  
     conn.close()
@@ -33,7 +34,7 @@ def createWorkbook(db):
     ws.column_dimensions['C'].width = 35
     ws.column_dimensions['D'].width = 15
     ws.column_dimensions['E'].width = 15
-    ws.column_dimensions['F'].width = 15
+    ws.column_dimensions['F'].width = 20
     ws.column_dimensions['G'].width = 15
     ws.column_dimensions['H'].width = 15
 
@@ -42,8 +43,9 @@ def createWorkbook(db):
     thick_border = Side(border_style="thick", color="000000")
     thin_border = Side(border_style="thin", color="000000")
 
-    ws['A7'] = 'Notes:'
+    #PLANT ROW HEADERS
 
+    ws['A7'] = 'Notes:'
     ws['B7']= 'qty'
     ws['B7'].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
     ws['B7'].alignment = Alignment(horizontal='center')
@@ -60,7 +62,7 @@ def createWorkbook(db):
     ws['E7'].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
     ws['E7'].alignment = Alignment(horizontal='center')
     ws['E7'].font = Font(bold=True, size= 12)
-    ws['F7'] = 'ext cost'
+    ws['F7'] = 'Ext. Plant Cost'
     ws['F7'].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
     ws['F7'].alignment = Alignment(horizontal='center')
     ws['F7'].font = Font(bold=True, size= 12)
@@ -77,18 +79,17 @@ def createWorkbook(db):
 
     cur = conn.cursor()
     
+
+    #PLANT LABOR FACTOR DATA
+
     cur.execute('''CREATE TABLE IF NOT EXISTS labor_factors (con_qrt TEXT, con_gal TEXT, con_2gal TEXT, con_3gal TEXT, con_5gal TEXT, con_7gal TEXT, con_10gal TEXT, con_15gal TEXT, con_25gal TEXT,
                     dec_15 TEXT, dec_20 TEXT, dec_25 TEXT, dec_30 TEXT, dec_35 TEXT, dec_40 TEXT, dec_45 TEXT, dec_50 TEXT, dec_60 TEXT, dec_70 TEXT,
                     ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_10 TEXT, ever_12 TEXT, ever_14 TEXT,
                     sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_48 TEXT
-                    )''')
-    
-    laborfactor_data = cur.execute('''SELECT * FROM labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchone()
-    
+                    )''') 
+    laborfactor_data = cur.execute('''SELECT * FROM labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchone() 
     if laborfactor_data == None:
-        print('try')
-
-
+        # print('try')
         cur.execute('''INSERT INTO labor_factors VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                     ''',(base_factors_dict['quart'], base_factors_dict['1gal'],base_factors_dict['2gal'], base_factors_dict['3gal'], base_factors_dict['5gal'], base_factors_dict['7gal'], base_factors_dict['10gal'], base_factors_dict['15gal'], base_factors_dict['25gal'],
                          base_factors_dict['one5inch'], base_factors_dict['twoinch'], base_factors_dict['two5inch'], base_factors_dict['threeinch'], base_factors_dict['three5inch'], base_factors_dict['fourinch'], base_factors_dict['four5inch'], base_factors_dict['fiveinch'], base_factors_dict['sixinch'], base_factors_dict['seveninch'],
@@ -96,11 +97,9 @@ def createWorkbook(db):
                          base_factors_dict['twelve'], base_factors_dict['fifteen'], base_factors_dict['eighteen'], base_factors_dict['twentyfour'], base_factors_dict['thirty'],base_factors_dict['thirtysix'], base_factors_dict['fortyeight']))
         conn.commit()
         laborfactor_data = cur.execute('''SELECT * FROM labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchone()
-        print('except')
-
-    print('labor factor data is', laborfactor_data)
-    plant_data = cur.execute('''SELECT * FROM plants''').fetchall()
-
+        # print('except')
+    # print('labor factor data is', laborfactor_data)
+    
     db_labor_factors = {
                 "quart" : laborfactor_data[0],
                 "1gal" : laborfactor_data[1],
@@ -137,9 +136,36 @@ def createWorkbook(db):
                 "sh_36" : laborfactor_data[32],
                 "sh_48" : laborfactor_data[33]
                 }
-    print(db_labor_factors)
+    
+    #SERVICE LABOR FACTOR DATA
+# 
+    cur.execute('''CREATE TABLE IF NOT EXISTS service_labor_factors (mulch TEXT, soil TEXT, stone TEXT, flagstone TEXT, sixbysixbyeight_footer TEXT, sixbysixbyeight_course TEXT, paver TEXT, ads_4inchpipe TEXT,
+                    tilling TEXT, sod_prepped TEXT, sod_unprepped TEXT, sod_prepped_1wide TEXT, sod_prepped_3wide TEXT, sodcutter TEXT,
+                    six_upright TEXT, eight_upright TEXT, guywire_2ft TEXT, turnbuckle TEXT
+                    )''')
+    service_laborfactor_data = cur.execute('''SELECT * FROM service_labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchone() 
+    if service_laborfactor_data == None:
+        # print('try')
+        cur.execute('''INSERT INTO service_labor_factors VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                     ''',(base_service_factors["mulch_1yard"], base_service_factors["soil_1yard"],base_service_factors["stone_1yard"],base_service_factors["flagstone_100sqft_4inchbase"],base_service_factors["sixbysixbyeight_footer"],base_service_factors["sixbysixbyeight_course"],base_service_factors["paver_100sqft_4inchbase"],base_service_factors["pipe_4inchx10ft"],
+                        base_service_factors["tilling_100sqft"],base_service_factors["sod_500sqft_preppped"],base_service_factors["sod_500sqft_unprepped"],base_service_factors["sod_prepped_1wide"],base_service_factors["sod_prepped_3wide"],base_service_factors["sodcutter_100sqft"],
+                          base_service_factors["six_upright"],base_service_factors["eight_upright"],base_service_factors["guywire_2ft"],base_service_factors["turnbuckle"],  ))
+        conn.commit()
+        service_laborfactor_data = cur.execute('''SELECT * FROM service_labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchone()
+        # print('except')
+    # print(' service     labor factor data is', service_laborfactor_data)
+    
 
+    #ROWS OF PLANTS
+    # print(db_labor_factors)
+
+    plant_data = cur.execute('''SELECT * FROM plants''').fetchall()
+
+    # if no plants then print NO PLANTS
     plantrows = len(plant_data)
+    if plantrows == 0:
+        plantrows = 1
+        ws['B8'] = 'NO PLANTS'
 
     for i in plant_data:
         this_row = str(plant_data.index(i) + 8)
@@ -174,26 +200,30 @@ def createWorkbook(db):
         ws[manhour_col].alignment = Alignment(horizontal='center')
         ws[manhour_col].border = Border(top=thin_border, left=thin_border, right=thin_border, bottom=thin_border)
 
-    # Rows of services
-    service_header_row = plantrows + 8
 
-    ws['B' + str(service_header_row)]= 'qty'
+
+    # Row of SERVICE HEADERS
+        
+    service_header_row = plantrows + 8
+    
+    
+    ws['B' + str(service_header_row)]= 'Service Name'
     ws['B' + str(service_header_row)].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
     ws['B' + str(service_header_row)].alignment = Alignment(horizontal='center')
     ws['B' + str(service_header_row)].font = Font(bold=True, size= 12)
-    ws['C' + str(service_header_row)] = 'Labor Operations'
+    ws['C' + str(service_header_row)] = 'Materials'
     ws['C' + str(service_header_row)].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
     ws['C' + str(service_header_row)].alignment = Alignment(horizontal='center')
     ws['C' + str(service_header_row)].font = Font(bold=True, size= 12)
-    ws['D' + str(service_header_row)] = 'unit'
+    ws['D' + str(service_header_row)] = 'Material Cost'
     ws['D' + str(service_header_row)].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
     ws['D' + str(service_header_row)].alignment = Alignment(horizontal='center')
     ws['D' + str(service_header_row)].font = Font(bold=True, size= 12)
-    ws['E' + str(service_header_row)] = 'unit cost'
+    ws['E' + str(service_header_row)] = 'Change'
     ws['E' + str(service_header_row)].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
     ws['E' + str(service_header_row)].alignment = Alignment(horizontal='center')
     ws['E' + str(service_header_row)].font = Font(bold=True, size= 12)
-    ws['F' + str(service_header_row)] = 'ext cost'
+    ws['F' + str(service_header_row)] = 'Extended Mat Cost'
     ws['F' + str(service_header_row)].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
     ws['F' + str(service_header_row)].alignment = Alignment(horizontal='center')
     ws['F' + str(service_header_row)].font = Font(bold=True, size= 12)
@@ -206,28 +236,77 @@ def createWorkbook(db):
     ws['H' + str(service_header_row)].alignment = Alignment(horizontal='center')
     ws['H' + str(service_header_row)].font = Font(bold=True, size= 12)
 
+
+
+    #ROWS OF SERVICES
+    service_data = cur.execute('''SELECT * FROM services''').fetchall()
+
+    service_rows = len(service_data)
+
+    if service_rows == 0:
+        service_rows = 1
+        
+        ws['B' + str(plantrows + 9)] = 'NO SERVICES'
+
+    for i in service_data:
+        this_row = str(service_data.index(i) + plantrows + 9)
+        name_col = 'B' + this_row
+        mat_col = 'C' +this_row
+        mat_cost_col = 'D' +this_row
+        unit_cost_col = 'E' +this_row
+        ext_cost_col = 'F' +this_row
+        labor_factor_col = 'G' +this_row
+        manhour_col = 'H' +this_row
+        ws[name_col] = i[0]
+        ws[name_col].alignment = Alignment(horizontal='center')
+        ws[name_col].border = Border(top=thin_border, left=thin_border, right=thin_border, bottom=thin_border)
+        ws[mat_col] = i[1]
+        ws[mat_col].alignment = Alignment(horizontal='center')
+        ws[mat_col].border = Border(top=thin_border, left=thin_border, right=thin_border, bottom=thin_border)
+        ws[unit_cost_col] = i[1]
+        ws[unit_cost_col].alignment = Alignment(horizontal='center')
+        ws[unit_cost_col].border = Border(top=thin_border, left=thin_border, right=thin_border, bottom=thin_border)
+        ws[mat_cost_col] = float(i[2])
+        ws[mat_cost_col].number_format = numbers.FORMAT_CURRENCY_USD_SIMPLE
+        ws[mat_cost_col].alignment = Alignment(horizontal='center')
+        ws[mat_cost_col].border = Border(top=thin_border, left=thin_border, right=thin_border, bottom=thin_border)
+        ws[ext_cost_col] = float(i[2]) * 2
+        ws[ext_cost_col].number_format = numbers.FORMAT_CURRENCY_USD_SIMPLE
+        ws[ext_cost_col].alignment = Alignment(horizontal='center')
+        ws[ext_cost_col].border = Border(top=thin_border, left=thin_border, right=thin_border, bottom=thin_border)
+        ws[labor_factor_col] = 0
+        ws[labor_factor_col].alignment = Alignment(horizontal='center')
+        ws[labor_factor_col].border = Border(top=thin_border, left=thin_border, right=thin_border, bottom=thin_border)
+        ws[manhour_col] = i[3]
+        ws[manhour_col].alignment = Alignment(horizontal='center')
+        ws[manhour_col].border = Border(top=thin_border, left=thin_border, right=thin_border, bottom=thin_border)
+
+
+
+
+
     # ROWS OF TOTALS
-    direct_row = 'C' + str(plantrows+ 10)
+    direct_row = 'C' + str(plantrows+ service_rows + 10)
     ws[direct_row] = 'DIRECT COST LABOR'
     ws[direct_row].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thin_border)
     ws[direct_row].font = Font(bold=False, size= 9)
     ws[direct_row].alignment = Alignment(horizontal='center')
-    direct_mat_row = 'C' + str(plantrows+11)
+    direct_mat_row = 'C' + str(plantrows+ service_rows + 11)
     ws[direct_mat_row] = 'DIRECT COST MATERIALS(Materials, Tax, Freight)'
     ws[direct_mat_row].border = Border(top=thin_border, left=thick_border, right=thick_border, bottom=thin_border)
     ws[direct_mat_row].font = Font(bold=False, size= 8)
     ws[direct_mat_row].alignment = Alignment(horizontal='center')
-    billable_eqip_row = 'C' + str(plantrows+12)
+    billable_eqip_row = 'C' + str(plantrows + service_rows + 12)
     ws[billable_eqip_row] = 'Billable Equipment Rate'
     ws[billable_eqip_row].border = Border(top=thin_border, left=thick_border, right=thick_border, bottom=thin_border)
     ws[billable_eqip_row].font = Font(bold=False, size= 9)
     ws[billable_eqip_row].alignment = Alignment(horizontal='center')
-    total_direct_row = 'C' + str(plantrows+13)
+    total_direct_row = 'C' + str(plantrows + service_rows + 13)
     ws[total_direct_row] = 'TOTAL DIRECT COST'
     ws[total_direct_row].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
     ws[total_direct_row].font = Font(bold=False, size= 9)
     ws[total_direct_row].alignment = Alignment(horizontal='center')
-    desired_markup_row = 'C' + str(plantrows+15)
+    desired_markup_row = 'C' + str(plantrows + service_rows + 15)
     ws[desired_markup_row] = 'Enter Desired Mat Markup %'
     ws[desired_markup_row].border = Border(top=thick_border, left=thick_border, right=thick_border, bottom=thick_border)
     ws[desired_markup_row].font = Font(bold=True, size= 9)

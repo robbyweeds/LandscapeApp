@@ -17,7 +17,7 @@ def open_service_factor_setting_window(db, first, last):
         servicefactor_setting_window = Toplevel()
         servicefactor_setting_window.iconbitmap('Shearon Logo.ico')
         servicefactor_setting_window.title('Settings')
-        servicefactor_setting_window.geometry('700x700')
+        servicefactor_setting_window.geometry('700x450')
 
         setting_title = Label(servicefactor_setting_window, text='Labor Factors', font=header_font).grid(row=0,column=1)
 
@@ -30,28 +30,75 @@ def open_service_factor_setting_window(db, first, last):
         messagebox.showwarning("showwarning", "Missing Fields")
 
     def resetDefaultFactors():
-        print('update default labor factors')
+        print('update default service  labor factors')
         db_name = 'databases/' + str(db) + '.db'
         print(db_name)
+        mulch_factor.set(base_service_factors["mulch_1yard"])
+        soil_factor.set(base_service_factors["soil_1yard"])
+        stone_factor.set(base_service_factors["stone_1yard"])
+        flagstone_factor.set(base_service_factors["flagstone_100sqft_4inchbase"])
+        sixbysixbyeight_footer_factor.set(base_service_factors["sixbysixbyeight_footer"])
+        sixbysixbyeight_course_factor.set(base_service_factors["sixbysixbyeight_course"])
+        paver_factor.set(base_service_factors["paver_100sqft_4inchbase"])
+        ads_4pipe_factor.set(base_service_factors["pipe_4inchx10ft"])
+        groundtilling_factor.set(base_service_factors["tilling_100sqft"])
+        sodprepared_factor.set(base_service_factors["sod_500sqft_preppped"])
+        sodunprepared_factor.set(base_service_factors["sod_500sqft_unprepped"])
+        sodprepared_onewide_factor.set(base_service_factors["sod_prepped_1wide"])
+        sodprepared_threewide_factor.set(base_service_factors["sod_prepped_3wide"])
+        sodcutter.set(base_service_factors["sodcutter_100sqft"]),
+        sixfoot_upright_factor.set(base_service_factors["six_upright"])
+        eightfoot_upright_factor.set(base_service_factors["eight_upright"])
+        twofoot_guywire_factor.set(base_service_factors["guywire_2ft"])
+        sixinch_turnbuckle_factor.set(base_service_factors["turnbuckle"])
+
+        conn = sqlite3.connect(db_name)
+        cur = conn.cursor()
+        cur.execute('''DELETE FROM service_labor_factors''')
+        cur.execute('''INSERT INTO service_labor_factors VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    ''',(mulch_factor.get(), soil_factor.get(), stone_factor.get(), flagstone_factor.get(), sixbysixbyeight_footer_factor.get(), sixbysixbyeight_course_factor.get(), paver_factor.get(), ads_4pipe_factor.get(),
+                           groundtilling_factor.get(), sodprepared_factor.get(), sodunprepared_factor.get(), sodprepared_onewide_factor.get(), sodprepared_threewide_factor.get(), sodcutter.get(),
+                           sixfoot_upright_factor.get(), eightfoot_upright_factor.get(), twofoot_guywire_factor.get(), sixinch_turnbuckle_factor.get()
+                     ))
+        conn.commit()
+
+        conn.close()
 
     def updateFactors():
         
         print('update factors')
         db_name = 'databases/' + str(db) + '.db'
         print(db_name)
+        conn = sqlite3.connect(db_name)
+        cur = conn.cursor()
+        cur.execute('''CREATE TABLE IF NOT EXISTS service_labor_factors (mulch TEXT, soil TEXT, stone TEXT, flagstone TEXT, sixbysixbyeight_footer TEXT, sixbysixbyeight_course TEXT, paver TEXT, ads_4inchpipe TEXT,
+                    tilling TEXT, sod_prepped TEXT, sod_unprepped TEXT, sod_prepped_1wide TEXT, sod_prepped_3wide TEXT, sodcutter TEXT,
+                    six_upright TEXT, eight_upright TEXT, guywire_2ft TEXT, turnbuckle TEXT
+                    )''')
+        cur.execute('''DELETE FROM service_labor_factors''')
+        cur.execute('''INSERT INTO service_labor_factors VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                     ''', (mulch_factor.get(), soil_factor.get(), stone_factor.get(), flagstone_factor.get(), sixbysixbyeight_footer_factor.get(), sixbysixbyeight_course_factor.get(), paver_factor.get(), ads_4pipe_factor.get(),
+                           groundtilling_factor.get(), sodprepared_factor.get(), sodunprepared_factor.get(), sodprepared_onewide_factor.get(), sodprepared_threewide_factor.get(), sodcutter.get(),
+                           sixfoot_upright_factor.get(), eightfoot_upright_factor.get(), twofoot_guywire_factor.get(), sixinch_turnbuckle_factor.get()
+                     ))
+        conn.commit()
+        ret_cur = cur.execute('''SELECT * FROM service_labor_factors''').fetchall()
+        print(ret_cur)
+        conn.close()
+        servicefactor_setting_window.destroy()
+
 
     conn = sqlite3.connect(db_name)
     cur = conn.cursor()
-    # cur.execute('''CREATE TABLE IF NOT EXISTS labor_factors (con_qrt TEXT, con_gal TEXT, con_2gal TEXT, con_3gal TEXT, con_5gal TEXT, con_7gal TEXT, con_10gal TEXT, con_15gal TEXT, con_25gal TEXT,
-    #                 dec_15 TEXT, dec_20 TEXT, dec_25 TEXT, dec_30 TEXT, dec_35 TEXT, dec_40 TEXT, dec_45 TEXT, dec_50 TEXT, dec_60 TEXT, dec_70 TEXT,
-    #                 ever_4 TEXT, ever_5 TEXT, ever_6 TEXT, ever_7 TEXT, ever_8 TEXT, ever_10 TEXT, ever_12 TEXT, ever_14 TEXT,
-    #                 sh_12 TEXT, sh_15 TEXT, sh_18 TEXT, sh_24 TEXT, sh_30 TEXT, sh_36 TEXT, sh_48 TEXT
-    #                 )''')
-    # ret_data = cur.execute('''SELECT * FROM labor_factors WHERE ROWID IN ( SELECT max( ROWID ) FROM labor_factors )''').fetchone()
+    cur.execute('''CREATE TABLE IF NOT EXISTS service_labor_factors (mulch TEXT, soil TEXT, stone TEXT, flagstone TEXT, sixbysixbyeight_footer TEXT, sixbysixbyeight_course TEXT, paver TEXT, ads_4inchpipe TEXT,
+                    tilling TEXT, sod_prepped TEXT, sod_unprepped TEXT, sod_prepped_1wide TEXT, sod_prepped_3wide TEXT, sodcutter TEXT,
+                    six_upright TEXT, eight_upright TEXT, guywire_2ft TEXT, turnbuckle TEXT
+                    )''')
+    ret_data = cur.execute('''SELECT * FROM service_labor_factors WHERE ROWID IN ( SELECT max( ROWID ) FROM labor_factors )''').fetchone()
     
-    # print(ret_data)
+    print(ret_data)
 
-    conn.close()
+    
 
     # Material Service Factors
     Label(servicefactor_setting_window, text='Materials').grid(row=1, column=0, padx=padding_x2, pady=padding_y2)
@@ -119,3 +166,50 @@ def open_service_factor_setting_window(db, first, last):
     Entry(servicefactor_setting_window, textvariable=twofoot_guywire_factor).grid(row=10, column=3, padx=padding_x2, pady=padding_y2)
     Label(servicefactor_setting_window, text='6" Turnbuckle').grid(row=11, column=2, padx=padding_x2, pady=padding_y2)
     Entry(servicefactor_setting_window, textvariable=sixinch_turnbuckle_factor).grid(row=11, column=3, padx=padding_x2, pady=padding_y2)
+
+
+    Button(servicefactor_setting_window, text='Save Factors', command=updateFactors).grid(row=12, column=3, padx=padding_x2, pady=padding_y2)
+    Button(servicefactor_setting_window, text='Reset Deffault Factors', command=resetDefaultFactors).grid(row=12, column=2, padx=padding_x2, pady=padding_y2)
+
+
+    laborfactor_data = cur.execute('''SELECT * FROM service_labor_factors ORDER BY ROWID DESC LIMIT 1''').fetchone()
+    if laborfactor_data == None:
+        mulch_factor.set(base_service_factors["mulch_1yard"])
+        soil_factor.set(base_service_factors["soil_1yard"])
+        stone_factor.set(base_service_factors["stone_1yard"])
+        flagstone_factor.set(base_service_factors["flagstone_100sqft_4inchbase"])
+        sixbysixbyeight_footer_factor.set(base_service_factors["sixbysixbyeight_footer"])
+        sixbysixbyeight_course_factor.set(base_service_factors["sixbysixbyeight_course"])
+        paver_factor.set(base_service_factors["paver_100sqft_4inchbase"])
+        ads_4pipe_factor.set(base_service_factors["pipe_4inchx10ft"])
+        groundtilling_factor.set(base_service_factors["tilling_100sqft"])
+        sodprepared_factor.set(base_service_factors["sod_500sqft_preppped"])
+        sodunprepared_factor.set(base_service_factors["sod_500sqft_unprepped"])
+        sodprepared_onewide_factor.set(base_service_factors["sod_prepped_1wide"])
+        sodprepared_threewide_factor.set(base_service_factors["sod_prepped_3wide"])
+        sodcutter.set(base_service_factors["sodcutter_100sqft"]),
+        sixfoot_upright_factor.set(base_service_factors["six_upright"])
+        eightfoot_upright_factor.set(base_service_factors["eight_upright"])
+        twofoot_guywire_factor.set(base_service_factors["guywire_2ft"])
+        sixinch_turnbuckle_factor.set(base_service_factors["turnbuckle"])
+    else:
+        mulch_factor.set(laborfactor_data[0])
+        soil_factor.set(laborfactor_data[1])
+        stone_factor.set(laborfactor_data[2])
+        flagstone_factor.set(laborfactor_data[3])
+        sixbysixbyeight_footer_factor.set(laborfactor_data[4])
+        sixbysixbyeight_course_factor.set(laborfactor_data[5])
+        paver_factor.set(laborfactor_data[6])
+        ads_4pipe_factor.set(laborfactor_data[7])
+        groundtilling_factor.set(laborfactor_data[8])
+        sodprepared_factor.set(laborfactor_data[9])
+        sodunprepared_factor.set(laborfactor_data[10])
+        sodprepared_onewide_factor.set(laborfactor_data[11])
+        sodprepared_threewide_factor.set(laborfactor_data[12])
+        sodcutter.set(laborfactor_data[13]),
+        sixfoot_upright_factor.set(laborfactor_data[14])
+        eightfoot_upright_factor.set(laborfactor_data[15])
+        twofoot_guywire_factor.set(laborfactor_data[16])
+        sixinch_turnbuckle_factor.set(laborfactor_data[17])
+
+    conn.close()

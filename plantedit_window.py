@@ -93,7 +93,7 @@ def editPlants(db, first, last):
             Label(plant_edit_window, text= i[0]).grid(row=p_rows, column=0)
             Label(plant_edit_window, text= i[1]).grid(row=p_rows, column=1)
             Label(plant_edit_window, text= i[2]).grid(row=p_rows, column=2)
-            Label(plant_edit_window, text= i[3]).grid(row=p_rows, column=3)
+            Label(plant_edit_window, text= "${:,.2f}".format(int(i[3]))).grid(row=p_rows, column=3)
             Label(plant_edit_window, text=ret_entries.index(i)).grid(row=p_rows, column=4)
             Label(plant_edit_window, text= i[4]).grid(row=p_rows, column=5)
             Button(plant_edit_window, text="Edit", command=lambda: changePlantInfo(i)).grid(row=p_rows, column=6)

@@ -218,7 +218,7 @@ def open_labor_factor_setting_window(db, first, last):
     thirtysix_factor = StringVar()
     fortyeight_factor = StringVar()
 
-    Label(laborfactor_setting_window, text='Shrubs', font=header2_font).grid(row=1, column=5, padx=padding_x2, pady=padding_y2)
+    Label(laborfactor_setting_window, text='Shrubs', font=header2_font).grid(row=1, column=4, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='12"-15"').grid(row=2, column=4, padx=padding_x2, pady=padding_y2)
     Entry(laborfactor_setting_window, textvariable=twelve_factor).grid(row=2, column=5, padx=padding_x2, pady=padding_y2)
     Label(laborfactor_setting_window, text='15"-18"').grid(row=3, column=4, padx=padding_x2, pady=padding_y2)
