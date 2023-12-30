@@ -9,6 +9,7 @@ import editservicefactor_window as sFF
 import plantedit_window as pE
 import servicewindow_funcs as sF
 import excel_funcs as eF
+import overhead_settings as oV
 from hard_coding import *
 
 root = Tk()
@@ -58,6 +59,10 @@ setting_menu.add_command(
 setting_menu.add_command(
     label='Service Factors',
     command=lambda: sFF.open_service_factor_setting_window(e3_var.get(), e2_var.get(),e1_var.get() )
+    )
+setting_menu.add_command(
+    label='Overhead Formula',
+    command=lambda: oV.open_overhead_settings(e3_var.get(), e2_var.get(),e1_var.get() )
     )
 root_menu.add_cascade(
     label='Settings',

@@ -66,6 +66,14 @@ base_service_factors = {
         "turnbuckle" : "1.0"
                         }
 
+base_overhead = {
+    "gross" : "42",
+    "overhead" : "0.58",
+    "adj" : "0.70",
+    "wtf" : "0.26",
+    "sub" : "30"
+                        }
+
 
 
 grid_rows = 3
