@@ -43,6 +43,7 @@ e3 = Entry(root, textvariable=e3_var).grid(row=2, column=1, padx=padding_x, pady
 b1 = Button(root, text='Add Plants', command=lambda: wF.open_plant_window(e3_var.get(), e2_var.get(),e1_var.get())).grid(row=3, column=0, padx=padding_x, pady=padding_y)
 b11 = Button(root, text='Edit Plants', command=lambda: pE.editPlants(e3_var.get(), e2_var.get(),e1_var.get())).grid(row=3, column=1, padx=padding_x, pady=padding_y)
 b2 = Button(root, text='Add Services', command=lambda: sF.open_service_window(e3_var.get(), e2_var.get(),e1_var.get())).grid(row=4, column=0, padx=padding_x, pady=padding_y)
+# b22 = Button(root, text='Edit Services', comman= lambda: ).grid(row=5, column=1, padx=padding_x, pady=padding_y)
 b3 = Button(root, text='Create Excel', command=lambda: eF.createExcel(e3_var.get(), e2_var.get(),e1_var.get())).grid(row=5, column=0, padx=padding_x, pady=padding_y)
 
 
